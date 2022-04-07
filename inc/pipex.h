@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/04/07 15:46:12 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/04/07 18:12:40 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,4 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-int pipex(char *s);
+void pipex(int fd1, int fd2, char** argv, char** envp);
