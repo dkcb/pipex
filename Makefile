@@ -6,7 +6,7 @@
 #    By: dkocob <dkocob@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/06 17:48:16 by dkocob        #+#    #+#                  #
-#    Updated: 2022/04/07 15:59:02 by dkocob        ########   odam.nl          #
+#    Updated: 2022/04/07 18:25:42 by dkocob        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,20 +16,20 @@ OBJ			= $(SRC:.c=.o)
 NAME		= pipex
 CFLAGS		= -Wall -Werror -Wextra
 
-all:			$(NAME)
+all:		$(NAME)
 
-$(NAME):		$(OBJ)
-				$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+$(NAME):	$(OBJ)
+			$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-run:			$(NAME)
-				./$(NAME)
+run:		$(NAME)
+			./$(NAME)
 
 clean:
-				rm -f $(OBJ)
+			rm -f $(OBJ)
 
-fclean:			clean
-				rm -f $(NAME)
+fclean:		clean
+			rm -f $(NAME)
 
-re:				fclean $(NAME)
+re:			fclean $(NAME)
 
-.PHONY:			all clean fclean re bonus run
+.PHONY:		all clean fclean re bonus run
