@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   pipex.h                                            :+:    :+:            */
+/*   ft_memccpy.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/04/14 14:33:06 by dkocob        ########   odam.nl         */
+/*   Created: 2020/08/17 15:29:12 by dkocob        #+#    #+#                 */
+/*   Updated: 2021/02/10 16:49:14 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include "gnl/get_next_line.h"
-#include "libft/libft.h"
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
+{
+	size_t				i;
+	unsigned char		*d;
+	unsigned char		ch;
+	const unsigned char	*s;
 
-int	pipex(int fd1, int fd2, char** argv, char** envp);
-#endif
+	d = (unsigned char *)dst;
+	s = (const unsigned char *)src;
+	ch = (unsigned char)c;
+	i = 0;
+	while (i < n)
+	{
+		d[i] = s[i];
+		if (d[i] == ch)
+			return (dst + i + 1);
+		i++;
+	}
+	return (NULL);
+}

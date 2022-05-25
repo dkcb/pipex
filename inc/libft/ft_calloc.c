@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   pipex.h                                            :+:    :+:            */
+/*   ft_calloc.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/04/14 14:33:06 by dkocob        ########   odam.nl         */
+/*   Created: 2020/08/17 15:29:12 by dkocob        #+#    #+#                 */
+/*   Updated: 2021/02/10 16:49:14 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include "gnl/get_next_line.h"
-#include "libft/libft.h"
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*res;
 
-int	pipex(int fd1, int fd2, char** argv, char** envp);
-#endif
+	res = malloc(count * size);
+	if (!res)
+		return (NULL);
+	ft_bzero(res, count * size);
+	return (res);
+}

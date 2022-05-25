@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   pipex.h                                            :+:    :+:            */
+/*   ft_strdup.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/04/14 14:33:06 by dkocob        ########   odam.nl         */
+/*   Created: 2020/08/17 15:29:12 by dkocob        #+#    #+#                 */
+/*   Updated: 2021/02/10 16:49:19 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include "gnl/get_next_line.h"
-#include "libft/libft.h"
+char	*ft_strdup(const char *src)
+{
+	char	*arr;
+	int		i;
 
-int	pipex(int fd1, int fd2, char** argv, char** envp);
-#endif
+	i = 0;
+	while (src[i] != '\0')
+		i++;
+	arr = malloc(sizeof(char) * (i + 1));
+	if (!arr)
+		return (NULL);
+	i = 0;
+	while (src[i] != '\0')
+	{
+		arr[i] = src[i];
+		i++;
+	}
+	arr[i] = '\0';
+	return (arr);
+}

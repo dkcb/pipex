@@ -6,15 +6,15 @@
 #    By: dkocob <dkocob@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/06 17:48:16 by dkocob        #+#    #+#                  #
-#    Updated: 2022/04/07 18:25:42 by dkocob        ########   odam.nl          #
+#    Updated: 2022/05/23 16:58:34 by dkocob        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-VPATH		= ./obj:./src:./libft/:
-SRC			= main.c pipex.c
+VPATH		= ./obj:./src:./inc/libft:./inc/gnl:
+SRC			= main.c pipex.c ft_strncmp.c ft_strlcpy.c 
 OBJ			= $(SRC:.c=.o)
 NAME		= pipex
-CFLAGS		= -Wall -Werror -Wextra
+CFLAGS		= #-Wall -Werror -Wextra
 
 all:		$(NAME)
 
@@ -22,7 +22,7 @@ $(NAME):	$(OBJ)
 			$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 run:		$(NAME)
-			./$(NAME)
+			./$(NAME) infile "ls -l" "wc -l" outfile
 
 clean:
 			rm -f $(OBJ)
