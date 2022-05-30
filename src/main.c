@@ -6,21 +6,13 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/05/30 12:07:44 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/05/30 12:19:27 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 
-
-
 // open, close, read, write, malloc, free, perror, strerror, access, dup, dup2, execve, exit, fork, pipe, unlink, wait, waitpid
-// char *ft_findpath(paths, argv)
-// {
-// 	int	i = 0;
-
-// 	access();
-// }
 
 char	*ft_slf(char *d, char *s, size_t len, int f)
 {
@@ -62,7 +54,11 @@ int	main(int argc, char** argv, char **envp)
 	extern char	**environ;
 	char		*path;
 	char		**paths;
-	int	i = 0;
+	int			i = 0;
+	int			fdp[2];
+	int			fd3;
+	int			pid = 0;
+	int			id1;
 
 	while (environ[i])
 	{
@@ -73,26 +69,13 @@ int	main(int argc, char** argv, char **envp)
 			i = 0;
 			break ;
 		}
-		// else
-		// 	paths = NULL;
 		i++;
 	}
-	// while (paths[i])
-	// {
-	// 	printf("path[%d]: %s\n", i , paths[i]);
-	// 	i++;
-	// }
 	fd1 = open(argv[1], O_RDONLY);
 	fd2 = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	// write(1, "oY!\n", 4);
-	// printf("fd1 = %d, fd2 = %d, argc = %d", fd1, fd2, argc);
-	if (fd1 < 0 || fd2 < 0 || argc != 5)
+	if (fd1 < 0 || fd2 < 0 || argc != 5 || !envp)
 		exit(0);
-	// cmd1 = sjf(path1, cmd1, 2);
-	if(access(argv[1], 0) < 0 || access(argv[4], 0) < 0)
-		exit(0); //perror("no cmd!") PATH?
 	cmd1 = malloc(sizeof(char *) * 4);
-	// cmd1[0] = ft_slf("Yo", "argv[1]", 0, 0);
 	i = 0;
 	while (paths[i])
 	{
@@ -108,16 +91,55 @@ int	main(int argc, char** argv, char **envp)
 		cmd1[0] = NULL;
 		i++;
 	}
-	// if (cmd1)
-	// {
+	fd3 = open("tmp", O_CREAT | O_RDWR | O_TRUNC, 0644);
 
-		cmd1[1] = argv[1];
-		cmd1[2] = NULL;
-		execve(cmd1[0], cmd1, NULL);
-	// }
+	if (pipe(fdp) == -1)
+	{
+		printf ("Pipe fails!\n");
+		exit (0);
+	}
+	id1 = fork();
+	if (id1 == -1)
+	{
+			printf ("Forking fails!\n");
+			return (4);
+	}
+	if (id1 == 0)
+	{
+		close (fdp[0]);
+		printf ("Child 1 \n\n");
+		if (write (fdp[1], "C1\n", 3) == -1)
+		{
+			
+			printf ("Write to pipe fails!\n");
+			return (2);
+		}
+		
+		close(fdp[1]);
+	}
+	else
+	{
+		wait(0);
+		char s[5];
+		
+		close (fdp[1]);
+		printf ("Child 2 \n\n");
+		if (read (fdp[0], &s, sizeof(char) * 3) == -1)
+		{
+			printf ("Read from pipe fails!\n");
+			return (3);
+		}
+		write(1, "E\n", 2);
+		printf("Read form pipe1: %s", s);
+		write(1, "F\n", 2);
+		close(fdp[0]);
+	}
+	if (pid == 0)
+	{
+		// execve(argv[1], &argv[2], envp);
+	}
+	while(wait(NULL) != -1);
+	execve(cmd1[0], cmd1, NULL);
 	err = errno;
-	// execve("/bin/ls", cmd1, NULL);
-
-	// pipex(fd1, fd2, argv, envp);
 	return (0);
 }
