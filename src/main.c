@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/05/30 16:55:09 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/05/30 17:06:24 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	main(int argc, char** argv, char **envp)
 	{
 		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
 		{
-			// printf("Env: %s\n", environ[i] + 5);
 			paths = ft_split(environ[i] + 5, ':');
 			i = 0;
 			break ;
@@ -108,8 +107,8 @@ int	main(int argc, char** argv, char **envp)
 	id1 = fork();
 	if (id1 == -1)
 	{
-			printf ("Forking fails!\n");
-			return (4);
+		printf ("Forking fails!\n");
+		return (4);
 	}
 	if (id1 == 0)
 	{
@@ -121,11 +120,6 @@ int	main(int argc, char** argv, char **envp)
 			printf ("Write to pipe fails!\n");
 			return (2);
 		}
-		if (dup2 (fdp[0], 0) == -1)
-		{
-			printf ("Write to file fails!\n");
-			return (2);
-		}
 		close(fdp[1]);
 		execve(cmd1[0], cmd1, NULL);
 		perror("Error Child");
@@ -133,18 +127,21 @@ int	main(int argc, char** argv, char **envp)
 	else
 	{
 		static char buf[100 + 1];
-		int rd = 100 + 1;
+		int rd = 0;
 		
 		wait(0);
 		cmd2 = get_cmd(paths, argv[3], NULL);
 		close (fdp[1]);
 		// printf ("Main %s, %s\n\n", cmd2[0], cmd2[1]);
-		dup2(fdp[0], 0);
-		dup2(fd2, 1);
-		if (write (1, buf, rd) < 0)
+		if (dup2 (fdp[0], 0) == -1)
+		{
+			printf ("Write to stdout fails!\n");
+			return (3);
+		}
+		if (dup2(fd2, 1) == -1);
 		{
 			write(2,"Read form pipe fails\n",22);
-			return (3);
+			return (5);
 		}
 		close(fdp[0]);
 	}
