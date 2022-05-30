@@ -6,7 +6,7 @@
 #    By: dkocob <dkocob@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/06 17:48:16 by dkocob        #+#    #+#                  #
-#    Updated: 2022/05/28 17:31:43 by dkocob        ########   odam.nl          #
+#    Updated: 2022/05/30 13:51:39 by dkocob        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ $(NAME):	$(OBJ)
 			$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 run:		$(NAME)
-			./$(NAME) "infile" "cat" "cat" "outfile"
+			./$(NAME) "infile" "cat" "/bin/cat" "outfile"
 
 clean:
 			rm -f $(OBJ)

@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/05/30 12:19:27 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/05/30 13:57:38 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	main(int argc, char** argv, char **envp)
 	char		**paths;
 	int			i = 0;
 	int			fdp[2];
-	int			fd3;
 	int			pid = 0;
 	int			id1;
 
@@ -91,7 +90,6 @@ int	main(int argc, char** argv, char **envp)
 		cmd1[0] = NULL;
 		i++;
 	}
-	fd3 = open("tmp", O_CREAT | O_RDWR | O_TRUNC, 0644);
 
 	if (pipe(fdp) == -1)
 	{
@@ -108,38 +106,56 @@ int	main(int argc, char** argv, char **envp)
 	{
 		close (fdp[0]);
 		printf ("Child 1 \n\n");
-		if (write (fdp[1], "C1\n", 3) == -1)
+		// dup();
+		
+		if (dup2 (fdp[1], 1) == -1)
 		{
-			
 			printf ("Write to pipe fails!\n");
 			return (2);
 		}
-		
+		// if (write (fdp[1], read(), 3) == -1)
+		// {
+		// 	printf ("Write to pipe fails!\n");
+		// 	return (2);
+		// }
 		close(fdp[1]);
+		cmd1[1] = argv[1];
+		cmd1[2] = NULL;
+		execve(cmd1[0], cmd1, NULL);
 	}
 	else
 	{
-		wait(0);
-		char s[5];
+		static char buf[1000 + 1];
+		int rd;
 		
+		wait(0);
 		close (fdp[1]);
 		printf ("Child 2 \n\n");
-		if (read (fdp[0], &s, sizeof(char) * 3) == -1)
+		// rd = read (fdp[0], buf, 1000);
+		// if (rd == -1)
+		// {
+		// 	printf("read from pipe err!\n");
+		// 	exit(0);
+		// }
+
+		// write(1, "E\n", 2);
+		// printf("Read form pipe1: %s", buf);
+		// write(1, "F\n", 2);
+		dup2(fdp[0], 0);
+		if (write (1, buf, rd) < 0)
 		{
 			printf ("Read from pipe fails!\n");
+			write(2,"Read form pipe fails\n",22);
 			return (3);
 		}
-		write(1, "E\n", 2);
-		printf("Read form pipe1: %s", s);
-		write(1, "F\n", 2);
 		close(fdp[0]);
 	}
-	if (pid == 0)
-	{
-		// execve(argv[1], &argv[2], envp);
-	}
-	while(wait(NULL) != -1);
-	execve(cmd1[0], cmd1, NULL);
-	err = errno;
+	// while(wait(NULL) != -1);
+	cmd1[0] = argv[3];
+	cmd1[1] = NULL;
+	printf("exeve:%d\n", execve(cmd1[0], cmd1, NULL));
+	
+	//err = errno;
+	perror("Error");
 	return (0);
 }
