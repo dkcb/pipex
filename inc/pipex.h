@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/05/26 16:41:53 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/05/30 18:34:51 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@
 #include <errno.h>
 #include "gnl/get_next_line.h"
 #include "libft/libft.h"
+
+struct s_d
+{
+	int		fd1;
+	int		fd2;
+	char	**argv;
+	int		argc;
+	char	**paths;
+	char	**cmd1;
+	char	**cmd2;
+};
 
 int	pipex(int fd1, int fd2, char** argv, char** envp);
 char *ft_findpath(char *paths, char **argv);
