@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/05/23 17:30:54 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/05/28 16:23:40 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	pipex(int fd1, int fd2, char** argv, char** envp)
 			printf ("Write to pipe fails!\n");
 			return (2);
 		}
+		
 		close(fdp[1]);
 	}
 	else
