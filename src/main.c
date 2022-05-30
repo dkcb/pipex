@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/05/30 13:57:38 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/05/30 16:55:09 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,32 @@ char	*ft_slf(char *d, char *s, size_t len, int f)
 	return (t);
 }
 
+char **get_cmd(char **paths, char *cmd, char *file)
+{
+	int i = 0;
+	char **result;
+
+	result = malloc (sizeof(char*) * 3);
+	while (paths[i])
+	{
+		result[0] = ft_slf(paths[i], ft_slf("/", cmd, 0, 0), 0, 2);
+		int acc = access(result[0], X_OK);
+		// printf("result[0] = %s, %d\n", result[0], acc);
+		if (acc > -1)
+		{
+			printf("2:result[0] = %s\n", result[0]);
+			break ;
+		}
+		free (result[0]);
+		result[0] = NULL;
+		i++;
+	}
+	result[1] = file;
+	result[2] = NULL;
+	return (result);
+
+}
+
 int	main(int argc, char** argv, char **envp)
 {
 	int			fd1;
@@ -63,7 +89,7 @@ int	main(int argc, char** argv, char **envp)
 	{
 		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
 		{
-			printf("Env: %s\n", environ[i] + 5);
+			// printf("Env: %s\n", environ[i] + 5);
 			paths = ft_split(environ[i] + 5, ':');
 			i = 0;
 			break ;
@@ -74,23 +100,6 @@ int	main(int argc, char** argv, char **envp)
 	fd2 = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd1 < 0 || fd2 < 0 || argc != 5 || !envp)
 		exit(0);
-	cmd1 = malloc(sizeof(char *) * 4);
-	i = 0;
-	while (paths[i])
-	{
-		cmd1[0] = ft_slf(paths[i], ft_slf("/", argv[2], 0, 0), 0, 2);
-		int acc = access(cmd1[0], X_OK);
-		printf("cmd1[0] = %s, %d\n", cmd1[0], acc);
-		if (acc > -1)
-		{
-			printf("2:cmd1[0] = %s\n", cmd1[0]);
-			break ;
-		}
-		free (cmd1[0]);
-		cmd1[0] = NULL;
-		i++;
-	}
-
 	if (pipe(fdp) == -1)
 	{
 		printf ("Pipe fails!\n");
@@ -104,58 +113,42 @@ int	main(int argc, char** argv, char **envp)
 	}
 	if (id1 == 0)
 	{
+		cmd1 = get_cmd(paths, argv[2], argv[1]);
 		close (fdp[0]);
-		printf ("Child 1 \n\n");
-		// dup();
-		
+		// printf ("Child %s, %s\n\n", cmd1[0], cmd1[1]);
 		if (dup2 (fdp[1], 1) == -1)
 		{
 			printf ("Write to pipe fails!\n");
 			return (2);
 		}
-		// if (write (fdp[1], read(), 3) == -1)
-		// {
-		// 	printf ("Write to pipe fails!\n");
-		// 	return (2);
-		// }
+		if (dup2 (fdp[0], 0) == -1)
+		{
+			printf ("Write to file fails!\n");
+			return (2);
+		}
 		close(fdp[1]);
-		cmd1[1] = argv[1];
-		cmd1[2] = NULL;
 		execve(cmd1[0], cmd1, NULL);
+		perror("Error Child");
 	}
 	else
 	{
-		static char buf[1000 + 1];
-		int rd;
+		static char buf[100 + 1];
+		int rd = 100 + 1;
 		
 		wait(0);
+		cmd2 = get_cmd(paths, argv[3], NULL);
 		close (fdp[1]);
-		printf ("Child 2 \n\n");
-		// rd = read (fdp[0], buf, 1000);
-		// if (rd == -1)
-		// {
-		// 	printf("read from pipe err!\n");
-		// 	exit(0);
-		// }
-
-		// write(1, "E\n", 2);
-		// printf("Read form pipe1: %s", buf);
-		// write(1, "F\n", 2);
+		// printf ("Main %s, %s\n\n", cmd2[0], cmd2[1]);
 		dup2(fdp[0], 0);
+		dup2(fd2, 1);
 		if (write (1, buf, rd) < 0)
 		{
-			printf ("Read from pipe fails!\n");
 			write(2,"Read form pipe fails\n",22);
 			return (3);
 		}
 		close(fdp[0]);
 	}
-	// while(wait(NULL) != -1);
-	cmd1[0] = argv[3];
-	cmd1[1] = NULL;
-	printf("exeve:%d\n", execve(cmd1[0], cmd1, NULL));
-	
-	//err = errno;
-	perror("Error");
+	execve(cmd2[0], cmd2, NULL);
+	perror("Error Main");
 	return (0);
 }
