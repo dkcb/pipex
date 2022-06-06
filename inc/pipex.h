@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/06 13:30:48 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/06 16:50:46 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/wait.h>
-#include "gnl/get_next_line.h"
 #include "libft/libft.h"
 
 #define OUT 0
