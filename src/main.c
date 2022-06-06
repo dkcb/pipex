@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/06 15:28:19 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/06 16:44:28 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,22 @@ int	dup_set(int i)
 	return (-1);
 }
 
-char	*ft_sf(char *d, char *s, size_t len, int f)
+char	*ft_sjf(char *s1, char *s2, int f)
 {
 	char	*t;
 
-	if (!d || !s)
+	if (!s1 || !s2)
 		return ((void *) 0);
-	if (len == 0 || len >= ft_strlen(s))
-		t = malloc(sizeof(char) * (ft_strlen(d) + ft_strlen(s) + 1));
-	else
-		t = malloc(sizeof(char) * (ft_strlen(d) + len + 2));
+	t = malloc(
+			sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!t)
 		return ((void *) 0);
-	ft_strlcpy(t, d, ft_strlen(d) + 1);
-	if (len == 0 || len >= ft_strlen(s))
-		ft_strlcpy(t + ft_strlen(d), s, ft_strlen(s) + 1);
-	else
-		ft_strlcpy(t + ft_strlen(d), s, len + 1);
+	ft_strlcpy(t, s1, ft_strlen(s1) + 1);
+	ft_strlcpy(t + ft_strlen(s1), s2, ft_strlen(s2) + 1);
 	if (f == 1 || f == 3)
-	{
-		free(d);
-		d = ((void *)0);
-	}
+		free(s1);
 	if (f == 2 || f == 3)
-	{
-		free(s);
-		s = ((void *)0);
-	}
+		free (s2);
 	return (t);
 }
 
@@ -91,16 +80,16 @@ char **get_cmd(char **paths, char *cmd)
 	result = ft_split(cmd, ' ');
 	if (!result)
 		exit(0);
-	result[0] = ft_slf("/", result[0], 0, 0);
+	result[0] = ft_sjf("/", result[0], 0);
 	if (!result[0])
 		exit(0);
-	tmp = ft_slf("", result[0], 0, 2);
+	tmp = ft_sjf("", result[0], 2);
 	if (!tmp)
 		exit(0);
 	i = 0;
 	while (paths[i])
 	{
-		result[0] = ft_slf(paths[i], tmp, 0, 0);
+		result[0] = ft_sjf(paths[i], tmp, 0);
 		if (!result[0])
 			exit(0);
 		acc = access(result[0], X_OK);
