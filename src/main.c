@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/06 16:44:28 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/06 17:10:50 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ int	dup_set(int i)
 		exit (0);
 	}
 	return (-1);
+}
+
+int	check_str(char *s)
+{
+	if (!s)
+		exit(0);
+	return (0);
 }
 
 char	*ft_sjf(char *s1, char *s2, int f)
@@ -78,25 +85,21 @@ char **get_cmd(char **paths, char *cmd)
 	int acc;
 
 	result = ft_split(cmd, ' ');
-	if (!result)
-		exit(0);
+	if(!result || !result[0])
+		exit (0);
 	result[0] = ft_sjf("/", result[0], 0);
-	if (!result[0])
-		exit(0);
+	check_str(result[0]);
 	tmp = ft_sjf("", result[0], 2);
-	if (!tmp)
-		exit(0);
+	check_str(tmp);
 	i = 0;
 	while (paths[i])
 	{
 		result[0] = ft_sjf(paths[i], tmp, 0);
-		if (!result[0])
-			exit(0);
+		check_str(result[0]);
 		acc = access(result[0], X_OK);
 		if (acc > -1)
 			break ;
 		free (result[0]);
-		result[0] = NULL;
 		i++;
 	}
 	free (tmp);
@@ -156,7 +159,6 @@ int	main(int argc, char** argv, char **envp)
 				close (d.pipe[PREV][OUT]);
 			close (d.pipe[CUR][IN]);
 		}
-
 	}
 	exit (0);
 	// while (waitpid(-1, 0, WUNTRACED) != -1);
