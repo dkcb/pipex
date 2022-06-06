@@ -6,37 +6,35 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/06 17:10:50 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/06 17:26:03 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 
-int	pipe_init(int i)
+int	err_chk(int i, int t, char *s)
 {
-	if (i == -1)
+	if (i == -1 && t == 0)
 	{
 		write (2, "Pipe initialisation error!\n", 27);
+		perror("Error");
 		exit (0);
 	}
-	return (-1);
-}
-
-int	dup_set(int i)
-{
-	if (i == -1)
+	if (i == -1 && t == 1)
 	{
 		write (2, "Dup2 error!\n", 12);
+		perror("Error");
 		exit (0);
 	}
-	return (-1);
-}
-
-int	check_str(char *s)
-{
+	if (i == -1 && t == 2)
+	{
+		write (2, "Forking error!\n", 12);
+		perror("Error");
+		exit (0);
+	}
 	if (!s)
 		exit(0);
-	return (0);
+	return (-1);
 }
 
 char	*ft_sjf(char *s1, char *s2, int f)
@@ -45,8 +43,7 @@ char	*ft_sjf(char *s1, char *s2, int f)
 
 	if (!s1 || !s2)
 		return ((void *) 0);
-	t = malloc(
-			sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	t = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!t)
 		return ((void *) 0);
 	ft_strlcpy(t, s1, ft_strlen(s1) + 1);
@@ -60,15 +57,17 @@ char	*ft_sjf(char *s1, char *s2, int f)
 
 char **get_paths(char **envp)
 {
-	int i = 0;
+	int i;
 	char **paths;
 
+	i = 0;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
 			paths = ft_split(envp[i] + 5, ':');
-			i = 0;
+			if (!paths)
+				exit (0);
 			break ;
 		}
 		i++;
@@ -88,14 +87,14 @@ char **get_cmd(char **paths, char *cmd)
 	if(!result || !result[0])
 		exit (0);
 	result[0] = ft_sjf("/", result[0], 0);
-	check_str(result[0]);
+	err_chk(0, 0, result[0]);
 	tmp = ft_sjf("", result[0], 2);
-	check_str(tmp);
+	err_chk(0, 0, tmp);
 	i = 0;
 	while (paths[i])
 	{
 		result[0] = ft_sjf(paths[i], tmp, 0);
-		check_str(result[0]);
+		err_chk(0, 0, result[0]);
 		acc = access(result[0], X_OK);
 		if (acc > -1)
 			break ;
@@ -123,29 +122,28 @@ int	main(int argc, char** argv, char **envp)
 	while (i < argc - 3)
 	{
 		i++;
-		pipe_init(pipe(d.pipe[CUR]));
+		err_chk(pipe(d.pipe[CUR]), 0, "");
 		d.cmd1 = get_cmd(d.paths, argv[1 + i]);
 		id = fork();
-		if (id == -1)
-			return (printf ("Forking fails!\n"));
+		err_chk(id, 2, "");
 		if (id == 0)
 		{
 			close(d.pipe[CUR][OUT]);
 			if (i == 1)
 			{
-				dup_set(dup2(d.fd1, S_IN));
-				dup_set(dup2(d.pipe[CUR][IN], S_OUT));
+				err_chk(dup2(d.fd1, S_IN), 1, "");
+				err_chk(dup2(d.pipe[CUR][IN], S_OUT), 1, "");
 			}
 			else if (i < argc - 3)
 			{
-				dup_set(dup2(d.pipe[PREV][OUT], S_IN));
-				dup_set(dup2(d.pipe[CUR][IN], S_OUT));
+				err_chk(dup2(d.pipe[PREV][OUT], S_IN), 1, "");
+				err_chk(dup2(d.pipe[CUR][IN], S_OUT), 1, "");
 			}
 			else
 			{
 				close(d.pipe[PREV][IN]);
-				dup_set(dup2(d.fd2, S_OUT));
-				dup_set(dup2(d.pipe[PREV][OUT], S_IN));
+				err_chk(dup2(d.fd2, S_OUT), 1, "");
+				err_chk(dup2(d.pipe[PREV][OUT], S_IN), 1, "");
 			}
 			if (i > 1)
 				close (d.pipe[PREV][OUT]);
