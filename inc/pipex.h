@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/06 16:50:46 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/06 18:25:39 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,11 @@ struct s_d
 {
 	int		fd1;
 	int		fd2;
-	int		i;
-	// int		pipetopipe[2];
 	int		pipe[2][2];
-	// int		pipe2[2];
-	// int		pipe3[2];
-	// int		pipe[5][2];
 
-	int		**ppu;
-	int		*ppi;
-	int		*ppe;
-	int		argc;
-	char	**argv;
 	char	**paths;
 	char	**cmd1;
-	char	**cmd2;
-	char	*tmp;
 };
 
-int	pipex(int fd1, int fd2, char** argv, char** envp);
-char *ft_findpath(char *paths, char **argv);
 #endif
+

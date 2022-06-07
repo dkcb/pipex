@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/06 17:26:03 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/07 19:55:44 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_sjf(char *s1, char *s2, int f)
 	return (t);
 }
 
-char **get_paths(char **envp)
+char	**get_paths(char **envp)
 {
 	int i;
 	char **paths;
@@ -68,15 +68,15 @@ char **get_paths(char **envp)
 			paths = ft_split(envp[i] + 5, ':');
 			if (!paths)
 				exit (0);
-			break ;
+			return (paths) ;
 		}
 		i++;
 		paths = NULL;
 	}
-	return (paths);
+	exit (127);
 }
 
-char **get_cmd(char **paths, char *cmd)
+char	**get_cmd(char **paths, char *cmd)
 {
 	int i = 0;
 	char **result;
@@ -111,11 +111,9 @@ int	main(int argc, char** argv, char **envp)
 	int		i;
 	int		id;
 
-	d.argv = argv;
-	d.argc = argc;
-	d.paths = get_paths(envp);
 	d.fd1 = open(argv[1], O_RDONLY);
-	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc
+	d.paths = get_paths(envp);
 	if (d.fd1 < 0 || d.fd2 < 0 || !envp || !d.paths)
 		return (write (1, "Input Error!\n", 13));
 	i = 0;
@@ -145,20 +143,17 @@ int	main(int argc, char** argv, char **envp)
 				err_chk(dup2(d.fd2, S_OUT), 1, "");
 				err_chk(dup2(d.pipe[PREV][OUT], S_IN), 1, "");
 			}
-			if (i > 1)
-				close (d.pipe[PREV][OUT]);
+
 			close (d.pipe[CUR][IN]);
 			execve(d.cmd1[0], d.cmd1, NULL);
 			perror("Error File");
 		}
-		else
-		{
-			if (i > 1)
-				close (d.pipe[PREV][OUT]);
-			close (d.pipe[CUR][IN]);
-		}
+		if (i > 1)
+			close (d.pipe[PREV][OUT]);
+		close (d.pipe[CUR][IN]);
 	}
+	close(d.pipe[CUR][OUT]);
+	while (1)
+		continue;
 	exit (0);
-	// while (waitpid(-1, 0, WUNTRACED) != -1);
-	return (0);
 }
