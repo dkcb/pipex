@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/07 19:55:44 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/08 15:08:45 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,11 @@ int	main(int argc, char** argv, char **envp)
 	int		i;
 	int		id;
 
-	d.fd1 = open(argv[1], O_RDONLY);
+	d.fd1 = open(argv[1], O_RDONLY); // check huge file
 	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc
 	d.paths = get_paths(envp);
 	if (d.fd1 < 0 || d.fd2 < 0 || !envp || !d.paths)
-		return (write (1, "Input Error!\n", 13));
+		return (write (1, "Input Error!\n", 13)); // bash file not exist
 	i = 0;
 	while (i < argc - 3)
 	{
@@ -145,7 +145,7 @@ int	main(int argc, char** argv, char **envp)
 			}
 
 			close (d.pipe[CUR][IN]);
-			execve(d.cmd1[0], d.cmd1, NULL);
+			execve(d.cmd1[0], d.cmd1, NULL); // check if it correct working with all cmd exept for last one
 			perror("Error File");
 		}
 		if (i > 1)
@@ -153,7 +153,7 @@ int	main(int argc, char** argv, char **envp)
 		close (d.pipe[CUR][IN]);
 	}
 	close(d.pipe[CUR][OUT]);
-	while (1)
-		continue;
+	// while (1)
+	// 	continue;
 	exit (0);
 }

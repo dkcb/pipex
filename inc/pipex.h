@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/06 18:25:39 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/08 14:54:42 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@
 #define S_IN 0
 #define CUR (i + 1) % 2
 #define PREV i % 2
+
+enum e_pn
+{
+	
+ PREV = i % 2;
+};
+
 struct s_d
 {
 	int		fd1;
