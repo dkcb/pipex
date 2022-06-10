@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/10 14:14:43 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/10 14:58:52 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,18 +118,26 @@ int	main(int argc, char** argv, char **envp)
 	int		id;
 	char	**gnl;
 
+	gnl = malloc (sizeof(char **) * 2);
+
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
 
 		d.fd1 = open("here_doc", O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
 		// d.fd1 = get_next_line(0, d.heredoc); // check huge file
-		while (get_next_line(0, gnl))
+		while (1)
 		{
-			// get_next_line(0, gnl);
-			write (d.fd1, &gnl[0], ft_strlen(gnl[0]));
+			if (get_next_line(0, gnl) == 0)
+				break ;
+			// printf ("gnl: %s \n", gnl[0]);
+			write (d.fd1, gnl[0], ft_strlen(gnl[0]));
+			write (d.fd1, "\n", 1);
 			// free (gnl[0]);
 			i++;
 		}
+		// write (1, gnl[0], ft_strlen(gnl[0]));
+		exit (0);
+		// write (1, gnl[0], ft_strlen(gnl[0]));
 	}
 	else
 		d.fd1 = open(argv[1], O_RDONLY); // check huge file
