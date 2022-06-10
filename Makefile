@@ -6,7 +6,7 @@
 #    By: dkocob <dkocob@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/06 17:48:16 by dkocob        #+#    #+#                  #
-#    Updated: 2022/06/10 14:13:05 by dkocob        ########   odam.nl          #
+#    Updated: 2022/06/10 15:19:19 by dkocob        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ $(NAME):	$(OBJ)
 			$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 run:		$(NAME)
-			./$(NAME) "here_doc" "cat" "cat" "cat" "outfile"
+			./$(NAME) "here_doc" "wc" "cat" "cat" "outfile"
 clean:
 			rm -f $(OBJ)
 

@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/10 14:58:52 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/10 15:19:02 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,33 +118,35 @@ int	main(int argc, char** argv, char **envp)
 	int		id;
 	char	**gnl;
 
-	gnl = malloc (sizeof(char **) * 2);
+	i = 0;
 
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
 
 		d.fd1 = open("here_doc", O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
-		// d.fd1 = get_next_line(0, d.heredoc); // check huge file
+		gnl = malloc (sizeof(char **) * 2);
 		while (1)
 		{
-			if (get_next_line(0, gnl) == 0)
+			if (get_next_line(0, gnl) == 0 || ft_strncmp (gnl[0], argv[2], ft_strlen (argv[2]) + 1) == 0)
+			{
+				write(d.fd1, gnl[0], ft_strlen(gnl[0]));
+				free(gnl[0]);
+				free(gnl);
+				write(d.fd1, "\n", 1);
 				break ;
-			// printf ("gnl: %s \n", gnl[0]);
-			write (d.fd1, gnl[0], ft_strlen(gnl[0]));
-			write (d.fd1, "\n", 1);
-			// free (gnl[0]);
-			i++;
+			}
+			write(d.fd1, gnl[0], ft_strlen(gnl[0]));
+			free(gnl[0]);
+			write(d.fd1, "\n", 1);
 		}
-		// write (1, gnl[0], ft_strlen(gnl[0]));
-		exit (0);
-		// write (1, gnl[0], ft_strlen(gnl[0]));
+		close(d.fd1);
+		// exit (0);
 	}
-	else
-		d.fd1 = open(argv[1], O_RDONLY); // check huge file
+	// else
+	d.fd1 = open(argv[1], O_RDONLY); // check huge file
 	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
 	d.paths = get_paths(envp);
 	err_chk (d.fd1, 3, "");
-	i = 0;
 	while (i < argc - 3)
 	{
 		i++;
