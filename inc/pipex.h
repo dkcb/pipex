@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/08 14:54:42 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/10 14:11:53 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@
 #define CUR (i + 1) % 2
 #define PREV i % 2
 
-enum e_pn
-{
+// enum e_pn
+// {
 	
- PREV = i % 2;
-};
+//  PREV = i % 2;
+// };
 
 struct s_d
 {
@@ -43,6 +43,8 @@ struct s_d
 	char	**paths;
 	char	**cmd1;
 };
+
+int	get_next_line(int fd, char **line);
 
 #endif
 

@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/08 15:08:45 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/10 14:14:43 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,27 @@ int	err_chk(int i, int t, char *s)
 {
 	if (i == -1 && t == 0)
 	{
-		write (2, "Pipe initialisation error!\n", 27);
+		// write (2, "Pipe initialisation error!\n", 27);
 		perror("Error");
 		exit (0);
 	}
 	if (i == -1 && t == 1)
 	{
-		write (2, "Dup2 error!\n", 12);
+		// write (2, "Dup2 error!\n", 12);
 		perror("Error");
 		exit (0);
 	}
 	if (i == -1 && t == 2)
 	{
-		write (2, "Forking error!\n", 12);
+		// write (2, "Forking error!\n", 12);
 		perror("Error");
 		exit (0);
+	}
+	if (i <0  && t == 3)
+	{
+		write (2, "No such file or directory\n", 26);
+		// perror("Error");
+		exit (127);
 	}
 	if (!s)
 		exit(0);
@@ -95,7 +101,7 @@ char	**get_cmd(char **paths, char *cmd)
 	{
 		result[0] = ft_sjf(paths[i], tmp, 0);
 		err_chk(0, 0, result[0]);
-		acc = access(result[0], X_OK);
+		acc = access(result[0], X_OK); //check if cmd works without paths at all
 		if (acc > -1)
 			break ;
 		free (result[0]);
@@ -110,21 +116,35 @@ int	main(int argc, char** argv, char **envp)
 	struct	s_d	d;
 	int		i;
 	int		id;
+	char	**gnl;
 
-	d.fd1 = open(argv[1], O_RDONLY); // check huge file
-	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	{
+
+		d.fd1 = open("here_doc", O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
+		// d.fd1 = get_next_line(0, d.heredoc); // check huge file
+		while (get_next_line(0, gnl))
+		{
+			// get_next_line(0, gnl);
+			write (d.fd1, &gnl[0], ft_strlen(gnl[0]));
+			// free (gnl[0]);
+			i++;
+		}
+	}
+	else
+		d.fd1 = open(argv[1], O_RDONLY); // check huge file
+	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
 	d.paths = get_paths(envp);
-	if (d.fd1 < 0 || d.fd2 < 0 || !envp || !d.paths)
-		return (write (1, "Input Error!\n", 13)); // bash file not exist
+	err_chk (d.fd1, 3, "");
 	i = 0;
 	while (i < argc - 3)
 	{
 		i++;
 		err_chk(pipe(d.pipe[CUR]), 0, "");
-		d.cmd1 = get_cmd(d.paths, argv[1 + i]);
+		d.cmd1 = get_cmd(d.paths, argv[1 + i]); //if cmd is null just skip?
 		id = fork();
 		err_chk(id, 2, "");
-		if (id == 0)
+		if (id == 0) // how to check if pipe descriptor is still open?
 		{
 			close(d.pipe[CUR][OUT]);
 			if (i == 1)
@@ -146,6 +166,7 @@ int	main(int argc, char** argv, char **envp)
 
 			close (d.pipe[CUR][IN]);
 			execve(d.cmd1[0], d.cmd1, NULL); // check if it correct working with all cmd exept for last one
+			// exit(0);
 			perror("Error File");
 		}
 		if (i > 1)
