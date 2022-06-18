@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/10 15:19:02 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/10 17:34:06 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ char	**get_cmd(char **paths, char *cmd)
 	result = ft_split(cmd, ' ');
 	if(!result || !result[0])
 		exit (0);
+	if (access(result[0], X_OK) > -1)
+			return (result);
 	result[0] = ft_sjf("/", result[0], 0);
 	err_chk(0, 0, result[0]);
 	tmp = ft_sjf("", result[0], 2);
@@ -111,28 +113,30 @@ char	**get_cmd(char **paths, char *cmd)
 	return (result);
 }
 
-int	main(int argc, char** argv, char **envp)
+int	main(int argc, char** argv, char **envp) //if envp unset
 {
 	struct	s_d	d;
 	int		i;
+	int		hd;
 	int		id;
 	char	**gnl;
 
+
 	i = 0;
+	hd = 0;
 
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
 
-		d.fd1 = open("here_doc", O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
+		err_chk(pipe(d.pipe[CUR]), 0, "");
+		d.fd1 = open("here_doc", O_CREAT | O_RDWR | O_TRUNC, 0644);
 		gnl = malloc (sizeof(char **) * 2);
 		while (1)
 		{
 			if (get_next_line(0, gnl) == 0 || ft_strncmp (gnl[0], argv[2], ft_strlen (argv[2]) + 1) == 0)
 			{
-				write(d.fd1, gnl[0], ft_strlen(gnl[0]));
 				free(gnl[0]);
 				free(gnl);
-				write(d.fd1, "\n", 1);
 				break ;
 			}
 			write(d.fd1, gnl[0], ft_strlen(gnl[0]));
@@ -140,6 +144,7 @@ int	main(int argc, char** argv, char **envp)
 			write(d.fd1, "\n", 1);
 		}
 		close(d.fd1);
+		hd = 1;
 		// exit (0);
 	}
 	// else
@@ -147,6 +152,7 @@ int	main(int argc, char** argv, char **envp)
 	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
 	d.paths = get_paths(envp);
 	err_chk (d.fd1, 3, "");
+	i+= hd;
 	while (i < argc - 3)
 	{
 		i++;
@@ -157,7 +163,7 @@ int	main(int argc, char** argv, char **envp)
 		if (id == 0) // how to check if pipe descriptor is still open?
 		{
 			close(d.pipe[CUR][OUT]);
-			if (i == 1)
+			if (i == 1 || (i == 2 && hd == 1))
 			{
 				err_chk(dup2(d.fd1, S_IN), 1, "");
 				err_chk(dup2(d.pipe[CUR][IN], S_OUT), 1, "");
@@ -183,7 +189,8 @@ int	main(int argc, char** argv, char **envp)
 			close (d.pipe[PREV][OUT]);
 		close (d.pipe[CUR][IN]);
 	}
-	close(d.pipe[CUR][OUT]);
+	close(d.pipe[CUR][OUT]); //fcntl (fd, F_GETFD)
+	unlink("here_doc");
 	// while (1)
 	// 	continue;
 	exit (0);
