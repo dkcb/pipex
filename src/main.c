@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/18 15:14:30 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/18 15:47:00 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,22 @@ int	err_chk(int i, int t, char *s)
 {
 	if (i == -1 && t == 0)
 	{
-		// write (2, "Pipe initialisation error!\n", 27);
 		perror("Error");
 		exit (0);
 	}
 	if (i == -1 && t == 1)
 	{
-		// write (2, "Dup2 error!\n", 12);
 		perror("Error");
 		exit (0);
 	}
 	if (i == -1 && t == 2)
 	{
-		// write (2, "Forking error!\n", 12);
 		perror("Error");
 		exit (0);
 	}
-	if (i <0  && t == 3)
+	if (i < 0 && t == 3)
 	{
 		write (2, "No such file or directory\n", 26);
-		// perror("Error");
 		exit (127);
 	}
 	if (!s)
@@ -63,8 +59,8 @@ char	*ft_sjf(char *s1, char *s2, int f)
 
 char	**get_paths(char **envp)
 {
-	int i;
-	char **paths;
+	int		i;
+	char	**paths;
 
 	i = 0;
 	while (envp[i])
@@ -181,9 +177,7 @@ int	main(int argc, char** argv, char **envp) //if envp unset
 			close (d.pipe[PREV][OUT]);
 		close (d.pipe[CUR][IN]);
 	}
-	close(d.pipe[CUR][OUT]); //fcntl (fd, F_GETFD)
+	close(d.pipe[CUR][OUT]); //*fcntl (fd, F_GETFD)*/
 	unlink("here_doc");
-	// while (1)
-	// 	continue;
 	exit (0);
 }

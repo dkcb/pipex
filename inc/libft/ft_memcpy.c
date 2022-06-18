@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/17 15:29:12 by dkocob        #+#    #+#                 */
-/*   Updated: 2021/02/10 16:49:08 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/18 15:53:04 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 		return (0);
 	while (i < n)
 	{
-		*(char*)(dst + i) = *(char*)(src + i);
+		*(char *)(dst + i) = *(char *)(src + i);
 		i++;
 	}
 	return (dst);

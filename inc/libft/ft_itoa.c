@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                            :+:    :+:            */
+/*   ft_itoa.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/17 15:29:12 by dkocob        #+#    #+#                 */
-/*   Updated: 2021/02/10 16:49:13 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/18 15:52:33 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		ft_cnt_len(int n)
+static int	ft_cnt_len(int n)
 {
-	int j;
+	int	j;
 
 	if (n == 0)
 		return (1);
@@ -27,9 +27,9 @@ static int		ft_cnt_len(int n)
 	return (j);
 }
 
-static int		ft_cnt_apwr(int n)
+static int	ft_cnt_apwr(int n)
 {
-	int p;
+	int	p;
 
 	p = 1;
 	while (n >= 10)
@@ -40,7 +40,7 @@ static int		ft_cnt_apwr(int n)
 	return (p);
 }
 
-static char		*ft_malloc_it(int n, int neg, int l)
+static char	*ft_malloc_it(int n, int neg, int l)
 {
 	char	*str;
 
@@ -59,7 +59,7 @@ static char		*ft_malloc_it(int n, int neg, int l)
 	return (str);
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*str;
 	int		i;

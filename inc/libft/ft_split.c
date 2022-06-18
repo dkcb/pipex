@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                            :+:    :+:            */
+/*   ft_split.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/17 15:29:12 by dkocob        #+#    #+#                 */
-/*   Updated: 2021/02/10 16:49:13 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/18 15:54:24 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static size_t	ft_lncnt(char const *s, char c)
 {
-	size_t i;
-	size_t y;
+	size_t	i;
+	size_t	y;
 
 	i = 0;
 	y = 0;
@@ -35,7 +35,7 @@ static size_t	ft_lncnt(char const *s, char c)
 	return (y);
 }
 
-static char		**ft_malloc_error(char **result)
+static char	**ft_malloc_error(char **result)
 {
 	size_t	i;
 
@@ -49,7 +49,7 @@ static char		**ft_malloc_error(char **result)
 	return (NULL);
 }
 
-static char		**ft_malloc_array2(char const *s, char c, size_t x, size_t y)
+static char	**ft_malloc_array2(char const *s, char c, size_t x, size_t y)
 {
 	size_t	start_x;
 	char	**result;
@@ -77,7 +77,7 @@ static char		**ft_malloc_array2(char const *s, char c, size_t x, size_t y)
 	return (result);
 }
 
-char			**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**result;
 

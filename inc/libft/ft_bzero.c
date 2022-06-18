@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/17 15:29:12 by dkocob        #+#    #+#                 */
-/*   Updated: 2021/02/10 16:49:10 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/18 15:39:02 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	ft_bzero(void *s, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		*(char*)(s + i) = 0;
+		*(char *)(s + i) = 0;
 		i++;
 	}
-	return ;
 }

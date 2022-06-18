@@ -6,20 +6,20 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/10 14:11:53 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/18 15:40:37 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/wait.h>
-#include "libft/libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <sys/wait.h>
+# include "libft/libft.h"
 
 #define OUT 0
 #define IN 1
