@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/10 17:34:06 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/06/18 15:14:30 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,16 +121,12 @@ int	main(int argc, char** argv, char **envp) //if envp unset
 	int		id;
 	char	**gnl;
 
-
 	i = 0;
 	hd = 0;
-
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	if (ft_strncmp(argv[1], "here_doc", 8 + 1) == 0)
 	{
-
-		err_chk(pipe(d.pipe[CUR]), 0, "");
 		d.fd1 = open("here_doc", O_CREAT | O_RDWR | O_TRUNC, 0644);
-		gnl = malloc (sizeof(char **) * 2);
+		gnl = malloc (sizeof(char **));
 		while (1)
 		{
 			if (get_next_line(0, gnl) == 0 || ft_strncmp (gnl[0], argv[2], ft_strlen (argv[2]) + 1) == 0)
@@ -145,10 +141,8 @@ int	main(int argc, char** argv, char **envp) //if envp unset
 		}
 		close(d.fd1);
 		hd = 1;
-		// exit (0);
 	}
-	// else
-	d.fd1 = open(argv[1], O_RDONLY); // check huge file
+	d.fd1 = open(argv[1], O_RDONLY);
 	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644); //append with heredoc //put check only for last cmd
 	d.paths = get_paths(envp);
 	err_chk (d.fd1, 3, "");
@@ -179,10 +173,8 @@ int	main(int argc, char** argv, char **envp) //if envp unset
 				err_chk(dup2(d.fd2, S_OUT), 1, "");
 				err_chk(dup2(d.pipe[PREV][OUT], S_IN), 1, "");
 			}
-
 			close (d.pipe[CUR][IN]);
 			execve(d.cmd1[0], d.cmd1, NULL); // check if it correct working with all cmd exept for last one
-			// exit(0);
 			perror("Error File");
 		}
 		if (i > 1)
