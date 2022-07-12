@@ -6,7 +6,7 @@
 #    By: dkocob <dkocob@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/06 17:48:16 by dkocob        #+#    #+#                  #
-#    Updated: 2022/07/12 16:29:20 by dkocob        ########   odam.nl          #
+#    Updated: 2022/07/12 18:05:56 by dkocob        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,6 @@ $(NAME):	$(OBJ)
 
 run:		$(NAME)
 			./$(NAME) "infile" "cat" "cat" "outfile"
-#			# ./$(NAME) "here_doc" "sgbv" "cat" "cat" "outfile"
 clean:
 			rm -f $(OBJ)
 
