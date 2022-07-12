@@ -6,39 +6,43 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/18 15:43:10 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/07/01 18:56:31 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../inc/pipex.h"
+#include "../inc/pipex.h"
 
-// int	pipex(int fd1, int fd2, char** argv, char** envp)
-// {
-// 			// if (id == 0)
-// 		// {
-// 		// 	close(d.pipe[CUR][OUT]);
-// 		// 	if (i == 1)
-// 		// 	{
-// 		// 		err_chk(dup2(d.fd1, S_IN), 1, "");
-// 		// 		err_chk(dup2(d.pipe[CUR][IN], S_OUT), 1, "");
-// 		// 	}
-// 		// 	else if (i < argc - 3)
-// 		// 	{
-// 		// 		err_chk(dup2(d.pipe[PREV][OUT], S_IN), 1, "");
-// 		// 		err_chk(dup2(d.pipe[CUR][IN], S_OUT), 1, "");
-// 		// 	}
-// 		// 	else
-// 		// 	{
-// 		// 		close(d.pipe[PREV][IN]);
-// 		// 		err_chk(dup2(d.fd2, S_OUT), 1, "");
-// 		// 		err_chk(dup2(d.pipe[PREV][OUT], S_IN), 1, "");
-// 		// 	}
-// 		// 	if (i > 1)
-// 		// 		close (d.pipe[PREV][OUT]);
-// 		// 	close (d.pipe[CUR][IN]);
-// 		// 	execve(d.cmd1[0], d.cmd1, NULL);
-// 		// 	perror("Error File");
-// 		// }
-// 	// while (waitpid(-1, 0, WUNTRACED) != -1);
-// 	return(0);
-// }
+int	err_chk(int i, int t, char *s)
+{
+	if (i == -1 && t == 0)
+	{
+		write(2, "command not found\n", 18);
+		exit (127);
+	}
+	if (i == -1 && t == 1)
+	{
+		perror("");
+		exit (1);
+	}
+	if (!s)
+		exit(0);
+	return (-1);
+}
+
+char	*ft_sjf(char *s1, char *s2, int f)
+{
+	char	*t;
+
+	if (!s1 || !s2)
+		return ((void *) 0);
+	t = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!t)
+		return ((void *) 0);
+	ft_strlcpy(t, s1, ft_strlen(s1) + 1);
+	ft_strlcpy(t + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+	if (f == 1 || f == 3)
+		free(s1);
+	if (f == 2 || f == 3)
+		free (s2);
+	return (t);
+}

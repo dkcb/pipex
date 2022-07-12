@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/06/18 19:01:52 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/07/12 17:57:25 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,24 @@
 # include <sys/wait.h>
 # include "libft/libft.h"
 
-#define OUT 0
-#define IN 1
-#define S_OUT 1
-#define S_IN 0
-#define CUR (i + 1) % 2
-#define PREV i % 2
-
-// enum e_pn
-// {
-	
-//  PREV = i % 2;
-// };
+# define OUT 0
+# define IN 1
+# define S_OUT 1
+# define S_IN 0
 
 struct s_d
 {
 	int		fd1;
 	int		fd2;
+	int		id;
+	int		i;
 	int		pipe[2][2];
 
 	char	**paths;
 	char	**cmd1;
 };
 
-int	get_next_line(int fd, char **line);
-
+int		get_next_line(int fd, char **line);
+int		err_chk(int i, int t, char *s);
+char	*ft_sjf(char *s1, char *s2, int f);
 #endif
-
