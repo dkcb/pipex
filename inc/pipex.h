@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/07/12 17:57:25 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/07/25 19:54:04 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define IN 1
 # define S_OUT 1
 # define S_IN 0
+# define CUR (d->i + 1) % 2
+# define PREV d->i % 2
 
 struct s_d
 {

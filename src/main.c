@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/07/25 19:09:54 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/07/25 19:57:42 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,29 +91,27 @@ static int	heredoc(char **argv, struct s_d *d)
 	return (0);
 }
 
-void	pipex(struct s_d *d, int argc)
+static void	pipex(struct s_d *d, int argc, char **argv)
 {
+	d->i++;
+	err_chk(pipe(d->pipe[CUR]), 1, "");
+	d->id = fork();
+	err_chk(d->id, 1, "");
+	get_cmd(d, argv[1 + d->i], argc);
 	if (d->id == 0)
 	{
-		if (d->i == 1)
-		{
+		if (d->i == 1)//1st
 			err_chk(dup2(d->fd1, S_IN), 1, "");
-			err_chk(dup2(d->pipe[(d->i + 1) % 2][IN], S_OUT), 1, "");
-		}
-		else if (d->i < argc - 3)
-		{
-			err_chk(dup2(d->pipe[d->i % 2][OUT], S_IN), 1, "");
-			err_chk(dup2(d->pipe[(d->i + 1) % 2][IN], S_OUT), 1, "");
-		}
-		else
-		{
+		if (d->i != 1)// every
+			err_chk(dup2(d->pipe[PREV][OUT], S_IN), 1, "");
+		if (d->i != argc - 3)//every mid
+			err_chk(dup2(d->pipe[CUR][IN], S_OUT), 1, "");
+		if (d->i == argc - 3)//end
 			err_chk(dup2(d->fd2, S_OUT), 1, "");
-			err_chk(dup2(d->pipe[d->i % 2][OUT], S_IN), 1, "");
-		}
 		execve(d->cmd1[0], d->cmd1, NULL);
 	}
-	close (d->pipe[d->i % 2][OUT]);
-	close (d->pipe[(d->i + 1) % 2][IN]);
+	close (d->pipe[PREV][OUT]);
+	close (d->pipe[CUR][IN]);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -123,7 +121,7 @@ int	main(int argc, char **argv, char **envp)
 	d.i = 0;
 	d.i += heredoc(argv, &d);
 	d.fd2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (d.fd2 < 1 || argc < 5)
+	if (d.fd2 < 1 || argc < 4)
 		exit (1);
 	if (d.i == 0)
 	{
@@ -132,14 +130,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	d.paths = get_paths(envp);
 	while (d.i < argc - 3)
-	{
-		d.i++;
-		err_chk(pipe(d.pipe[(d.i + 1) % 2]), 1, "");
-		d.id = fork();
-		err_chk(d.id, 1, "");
-		get_cmd(&d, argv[1 + d.i], argc);
-		pipex(&d, argc);
-	}
+		pipex(&d, argc, argv);
 	close (d.pipe[(d.i + 1) % 2][OUT]);
 	waitpid(d.id, &d.i, 0);
 	exit (WEXITSTATUS(d.i));
