@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/07/22 16:52:26 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/07/25 19:02:06 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	pipex(struct s_d *d, int argc)
 {
 	if (d->id == 0)
 	{
-		close(d->pipe[(d->i + 1) % 2][OUT]);
 		if (d->i == 1)
 		{
 			err_chk(dup2(d->fd1, S_IN), 1, "");
@@ -113,8 +112,7 @@ void	pipex(struct s_d *d, int argc)
 		}
 		execve(d->cmd1[0], d->cmd1, NULL);
 	}
-	if (d->i > 1)
-		close (d->pipe[d->i % 2][OUT]);
+	close (d->pipe[d->i % 2][OUT]);
 	close (d->pipe[(d->i + 1) % 2][IN]);
 }
 
@@ -143,6 +141,9 @@ int	main(int argc, char **argv, char **envp)
 		pipex(&d, argc);
 		close (d.pipe[(d.i + 1) % 2][IN]);
 	}
+	close (d.pipe[(d.i + 1) % 2][OUT]);
 	waitpid(d.id, &d.i, 0);
+	while (1)
+		continue;
 	exit (WEXITSTATUS(d.i));
 }
