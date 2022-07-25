@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/07/25 19:03:47 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/07/25 19:09:54 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ int	main(int argc, char **argv, char **envp)
 		err_chk(d.id, 1, "");
 		get_cmd(&d, argv[1 + d.i], argc);
 		pipex(&d, argc);
-		close (d.pipe[(d.i + 1) % 2][IN]);
 	}
 	close (d.pipe[(d.i + 1) % 2][OUT]);
 	waitpid(d.id, &d.i, 0);
