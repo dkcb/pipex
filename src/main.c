@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/07/25 19:02:06 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/07/25 19:03:47 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,5 @@ int	main(int argc, char **argv, char **envp)
 	}
 	close (d.pipe[(d.i + 1) % 2][OUT]);
 	waitpid(d.id, &d.i, 0);
-	while (1)
-		continue;
 	exit (WEXITSTATUS(d.i));
 }
