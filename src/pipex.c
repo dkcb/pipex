@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/08/26 15:04:57 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/08/28 20:03:22 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	execve_error_messaging(int error, char *msg)
 	else
 		perror("");
 	exit (127);
+	return (0);
 }
 
 char	*ft_sjf(char *s1, char *s2, int f)
