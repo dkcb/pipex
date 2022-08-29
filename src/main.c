@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/08/29 12:00:49 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/08/29 12:14:36 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	heredoc(char **argv, struct s_d *d)
 
 	if (argv[1] && ft_strncmp(argv[1], "here_doc", 8 + 1) == 0)
 	{
-		err_chk(pipe(d->pipe[1]), 1, "");
+		err_chk(pipe(d->pipe[1]), 0, "");
 		gnl = malloc (sizeof(char **) * 2);
 		if (!gnl)
 			exit(0);
@@ -124,8 +124,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc < 4)
 		exit (1);
-	d.i = 0;
-	d.i += heredoc(argv, &d);
+	d.i = heredoc(argv, &d);
 	if (d.i == 0)
 	{
 		d.fd1 = open(argv[1], O_RDONLY);
@@ -136,9 +135,9 @@ int	main(int argc, char **argv, char **envp)
 	while (d.i < argc - 3)
 	{	
 		d.i++;
-		err_chk(pipe(d.pipe[d.i % 2]), 1, "");
+		err_chk(pipe(d.pipe[d.i % 2]), 0, "");
 		d.id = fork();
-		err_chk(d.id, 1, "");
+		err_chk(d.id, 0, "");
 		exec(&d, argc, argv);
 	}
 	close (d.pipe[d.i % 2][OUT]);

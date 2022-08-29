@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/08/28 20:03:22 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/08/29 12:12:27 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ int	err_chk(int i, int t, char *s)
 {
 	if (!s)
 		exit(0);
+	if (i == -1 && t == 0)
+	{
+		perror("error:");
+		exit (1);
+	}
 	if (i == -1 && t == 1)
 	{
 		exit (1);
@@ -25,6 +30,8 @@ int	err_chk(int i, int t, char *s)
 
 int	execve_error_messaging(int error, char *msg)
 {
+	if (!msg)
+		exit(0);
 	write(2, msg, ft_strlen(msg));
 	if (error == EACCES)
 	{
