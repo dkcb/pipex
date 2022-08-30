@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/08/29 12:14:36 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/08/30 19:20:06 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ static void	exec(struct s_d *d, int argc, char **argv)
 	if (d->id == 0)
 	{
 		if (d->i == 1)
+		{
 			err_chk(dup2(d->fd1, S_IN), 1, "");
+			close (d->pipe[d->i % 2][OUT]);
+		}
 		if (d->i != 1)
 			err_chk(dup2(d->pipe[(d->i + 1) % 2][OUT], S_IN), 1, "");
 		if (d->i != argc - 3)
@@ -108,11 +111,7 @@ static void	exec(struct s_d *d, int argc, char **argv)
 		}
 		get_cmd(d, argv[1 + d->i]);
 		if (execve(d->cmd1[0], d->cmd1, NULL) == -1)
-		{
-			if (!d->cmd1 || !d->cmd1[0])
-				exit (1);
-			execve_error_messaging(errno, argv[1 + d->i]);
-		}
+			execve_error_messaging(errno, argv[1 + d->i], d->cmd1);
 	}
 	close (d->pipe[(d->i + 1) % 2][OUT]);
 	close (d->pipe[d->i % 2][IN]);

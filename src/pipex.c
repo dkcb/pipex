@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:36:33 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/08/29 12:12:27 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/08/30 19:19:11 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ int	err_chk(int i, int t, char *s)
 	return (-1);
 }
 
-int	execve_error_messaging(int error, char *msg)
+void	execve_error_messaging(int error, char *msg, char **cmd)
 {
+	if (!cmd || !cmd[0])
+		exit (1);
 	if (!msg)
 		exit(0);
 	write(2, msg, ft_strlen(msg));
@@ -43,7 +45,6 @@ int	execve_error_messaging(int error, char *msg)
 	else
 		perror("");
 	exit (127);
-	return (0);
 }
 
 char	*ft_sjf(char *s1, char *s2, int f)

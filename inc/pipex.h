@@ -6,7 +6,7 @@
 /*   By: dkocob <dkocob@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/18 18:37:51 by dkocob        #+#    #+#                 */
-/*   Updated: 2022/08/26 15:03:59 by dkocob        ########   odam.nl         */
+/*   Updated: 2022/08/30 19:20:59 by dkocob        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ struct s_d
 int		get_next_line(int fd, char **line);
 int		err_chk(int i, int t, char *s);
 char	*ft_sjf(char *s1, char *s2, int f);
-int		execve_error_messaging(int error, char *msg);
+void	execve_error_messaging(int error, char *msg, char **cmd);
 
 #endif

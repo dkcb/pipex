@@ -6,7 +6,7 @@
 #    By: dkocob <dkocob@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/06 17:48:16 by dkocob        #+#    #+#                  #
-#    Updated: 2022/08/28 19:55:45 by dkocob        ########   odam.nl          #
+#    Updated: 2022/08/30 17:32:17 by dkocob        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ $(NAME):	$(OBJ)
 			$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 run:		$(NAME)
-			./$(NAME) "here_doc" "cat" "cat" "cat" "out"
+			./$(NAME) "/dev/random" "cat" "head -c 1000" "out"
 #			./$(NAME) "infile" "ct" "ct" "ls -a" "big"
 #			./$(NAME) "big" "ct" "ca" "wc -l" "out"
 clean:
