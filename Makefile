@@ -6,7 +6,7 @@
 #    By: dkocob <dkocob@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/06 17:48:16 by dkocob        #+#    #+#                  #
-#    Updated: 2022/08/30 17:32:17 by dkocob        ########   odam.nl          #
+#    Updated: 2022/08/31 12:44:18 by dkocob        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ $(NAME):	$(OBJ)
 
 run:		$(NAME)
 			./$(NAME) "/dev/random" "cat" "head -c 1000" "out"
+#			./$(NAME) "infile" "cat" "ls" "cat" "ls" "out"
 #			./$(NAME) "infile" "ct" "ct" "ls -a" "big"
 #			./$(NAME) "big" "ct" "ca" "wc -l" "out"
 clean:
